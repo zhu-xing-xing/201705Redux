@@ -1,7 +1,7 @@
 import {createStore} from './redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import $ from 'jquery';
+import $ from 'jquery';
 
 const INCREASE = 'INCREASE';
 const DECREASE = 'DECREASE';
@@ -22,35 +22,20 @@ let reducer = (state={number:0},action)=>{
 let store = createStore(reducer);
 
 class Counter extends React.Component{
-	constructor(){
-		super();
-		this.state = {number:store.getState().number};
-	}
-
-	componentWillMount(){
-		this.unsubscribe = store.subscribe(()=>{
-			this.setState({
-				number:store.getState().number
-			})
-		})
-	}
-
-	componentWillUnMount(){
-		this.unsubscribe();
-	}
-
 	render(){
 		return (
 			<div>
-				<p>{this.state.number}</p>
+				<p>{store.getState().number}</p>
 				<button onClick={()=>store.dispatch({type:INCREASE,amount:3})}>+</button>
-				<button onClick={()=>store.dispatch({type:DECREASE,amount:1})}>-</button>
+				<button onClick={()=>store.dispatch({type:DECREASE,amount:2})}>-</button>
 			</div>
 		)
 	}
 }
 
+let render = ()=>{
+	ReactDOM.render(<Counter />,document.querySelector('#root'))
+};
 
-ReactDOM.render(<Counter />,document.querySelector('#root'));
-
-
+store.subscribe(render);
+render();
